@@ -15,12 +15,9 @@ int16_t gx, gy, gz;
 
 void setup() {
     // initialize device
-    printf("Initializing I2C devices...\n");
     accelgyro.initialize();
 
-    // verify connection
-    printf("Testing device connections...\n");
-    printf(accelgyro.testConnection() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
+   // printf(accelgyro.testConnection() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
 }
 
 void loop() {

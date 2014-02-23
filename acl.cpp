@@ -164,9 +164,7 @@ void loop() {
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
             mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q); 
-            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
-            printf (" acl %6d %6d %6d    crash %6d %6d %6d ", aaReal.x, aaReal.y, aaReal.z, aaWorld.x, aaWorld.y, aaWorld.z);
+            printf (" %6d %6d %6d ", aaWorld.x, aaWorld.y, aaWorld.z);
 
 #endif
 
