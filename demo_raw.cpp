@@ -35,7 +35,6 @@ void loop() {
 int main()
 {
     setup();
-    for (;;)
-        loop();
+    loop();
 }
 
