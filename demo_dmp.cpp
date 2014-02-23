@@ -6,7 +6,12 @@
 #include <math.h>
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
-
+#include <iostream>
+#include <fstream>
+//using namespace std;
+int handle;
+FILE *stream;
+//ofstream output_file;
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
 // AD0 low = 0x68 (default for SparkFun breakout and InvenSense evaluation board)
@@ -36,13 +41,13 @@ MPU6050 mpu;
 // not compensated for orientation, so +X is always +X according to the
 // sensor, just without the effects of gravity. If you want acceleration
 // compensated for orientation, us OUTPUT_READABLE_WORLDACCEL instead.
-//#define OUTPUT_READABLE_REALACCEL
+#define OUTPUT_READABLE_REALACCEL
 
 // uncomment "OUTPUT_READABLE_WORLDACCEL" if you want to see acceleration
 // components with gravity removed and adjusted for the world frame of
 // reference (yaw is relative to initial orientation, since no magnetometer
 // is present in this case). Could be quite handy in some cases.
-#define OUTPUT_READABLE_WORLDACCEL
+//#define OUTPUT_READABLE_WORLDACCEL
 
 // uncomment "OUTPUT_TEAPOT" if you want output that matches the
 // format used for the InvenSense teapot demo
@@ -156,12 +161,20 @@ void loop() {
 
         #ifdef OUTPUT_READABLE_REALACCEL
             // display real acceleration, adjusted to remove gravity
+           
+           // output_file.open("stats.txt");
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetAccel(&aa, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
-            printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
-        #endif
+            //output_file << aaReal.x <<" "<<  aaReal.y <<" " << aaReal.z << " " << endl;
+            //output_file.close();
+                stream = fdopen(handle, "w");
+                fprintf (stream, "%6d %6d %6d", aaReal.x, aaReal.y, aaReal.z);
+                 fflush(stream);
+                 fclose(stream);
+                close (handle);
+#endif
 
         #ifdef OUTPUT_READABLE_WORLDACCEL
             // display initial world-frame acceleration, adjusted to remove gravity
@@ -179,8 +192,9 @@ void loop() {
 int main() {
     setup();
     usleep(100000);
+    for (;;){
     loop();
-
+    }
     return 0;
 }
 
